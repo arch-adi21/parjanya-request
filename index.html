@@ -27,8 +27,13 @@
             cursor: pointer;
         }
         #noButton {
-            position: absolute;
+            position: relative;
             transition: all 0.2s ease;
+            z-index: 10;
+        }
+        #yesButton {
+            position: relative;
+            z-index: 5;
         }
     </style>
 </head>
@@ -40,15 +45,24 @@
     </div>
     <script>
         const noButton = document.getElementById('noButton');
+        const yesButton = document.getElementById('yesButton');
         const container = document.querySelector('.container');
 
         function moveButton() {
-            const maxX = container.clientWidth - noButton.offsetWidth;
-            const maxY = container.clientHeight - noButton.offsetHeight;
-            
-            const newX = Math.random() * maxX;
-            const newY = Math.random() * maxY;
-            
+            const yesRect = yesButton.getBoundingClientRect();
+            const noRect = noButton.getBoundingClientRect();
+            const containerRect = container.getBoundingClientRect();
+
+            let newX, newY;
+            do {
+                newX = Math.random() * (containerRect.width - noRect.width);
+                newY = Math.random() * (containerRect.height - noRect.height);
+            } while (
+                newX < yesRect.right && newX + noRect.width > yesRect.left &&
+                newY < yesRect.bottom && newY + noRect.height > yesRect.top
+            );
+
+            noButton.style.position = 'absolute';
             noButton.style.left = newX + 'px';
             noButton.style.top = newY + 'px';
         }
@@ -62,12 +76,11 @@
             moveButton();
         });
 
-        document.getElementById('yesButton').addEventListener('click', () => {
+        yesButton.addEventListener('click', () => {
             alert('Great choice!');
         });
 
-        // Initial positioning
-        moveButton();
+        // No initial positioning - the button starts in its original position
     </script>
 </body>
 </html>
