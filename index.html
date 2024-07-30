@@ -12,9 +12,13 @@
             height: 100vh;
             margin: 0;
             font-family: Arial, sans-serif;
+            overflow: hidden;
         }
         .container {
             text-align: center;
+            width: 100%;
+            padding: 20px;
+            box-sizing: border-box;
         }
         button {
             font-size: 18px;
@@ -24,32 +28,46 @@
         }
         #noButton {
             position: absolute;
+            transition: all 0.2s ease;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>So here is the thing , Aditya Wants you to come and pick him up from his location for gym tomorrow evening , click yes to accept and no to reject. PS:- You can't use meta AI here XD</h1>
+        <h1>Do you want to continue?</h1>
         <button id="yesButton">Yes</button>
         <button id="noButton">No</button>
     </div>
     <script>
         const noButton = document.getElementById('noButton');
+        const container = document.querySelector('.container');
 
-        noButton.addEventListener('mouseover', () => {
-            const maxX = window.innerWidth - noButton.offsetWidth;
-            const maxY = window.innerHeight - noButton.offsetHeight;
+        function moveButton() {
+            const maxX = container.clientWidth - noButton.offsetWidth;
+            const maxY = container.clientHeight - noButton.offsetHeight;
             
             const newX = Math.random() * maxX;
             const newY = Math.random() * maxY;
             
             noButton.style.left = newX + 'px';
             noButton.style.top = newY + 'px';
+        }
+
+        // For desktop: move on hover
+        noButton.addEventListener('mouseover', moveButton);
+
+        // For mobile: move on touch
+        noButton.addEventListener('touchstart', function(e) {
+            e.preventDefault(); // Prevent the default touch behavior
+            moveButton();
         });
 
         document.getElementById('yesButton').addEventListener('click', () => {
             alert('Great choice!');
         });
+
+        // Initial positioning
+        moveButton();
     </script>
 </body>
 </html>
